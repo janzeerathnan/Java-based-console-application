@@ -1,4 +1,4 @@
-package Graph;
+package src.Graph;
 
 /** Graph vertex with a custom dynamic array of adjacent vertex indexes. */
 public class Vertex {

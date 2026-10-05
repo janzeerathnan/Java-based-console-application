@@ -1,7 +1,9 @@
-package Graph;
+package src;
 
 import java.util.List;
 import java.util.Scanner;
+
+import src.Graph.Graph;
 
 public class Main {
     private static final Scanner INPUT = new Scanner(System.in);
