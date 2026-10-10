@@ -1,44 +1,76 @@
-# Member 4: Graph, BFS, DFS, and Integration
+# CIT300 Data Structure and Graph Performance Analyzer — Project 02
 
-## Student Details
+## Description
 
-- Name: Athnan
-- Student ID: 23DA2-0490
-- Responsibility: Graph, BFS, DFS, and integration
+Standalone integrated Java console application demonstrating data structures, search algorithms, graph traversal, and performance observations. All project implementations are under this folder; no class is imported from a member folder.
 
-## Individual Contribution
+## Team Members
 
-Implemented the graph module and the integrated Final-Project menu in this workspace. Review and update this statement with the group so it accurately describes actual individual contributions.
+| Member | Name | Student ID | Responsibility |
+| --- | --- | --- | --- |
+| Member 1 | Thahiya | 23DA2-1151 | Array and Searching |
+| Member 2 | Ashadha | 23DA2-612 | Stack and Queue |
+| Member 3 | Hamthani | 23DA2- | Linked List |
+| Member 4 | Athnan | 23DA2-0490 | Graph, BFS, DFS, Integration |
 
-## Graph Representation
+Update names, IDs, and contribution claims with the actual team details before submission.
 
-The member graph is undirected and stores vertices plus each vertex’s neighbors in custom dynamic arrays. Traversal queues/stacks and visited flags also use arrays. Duplicate vertices, self-edges, duplicate edges, and edges with missing endpoints are rejected.
+## Individual Contributions
 
-## BFS and DFS
+Member responsibilities follow the project division: Thahiya — Array and Searching; Ashadha — Stack and Queue; Hamthani — Linked List; Athnan — Graph, BFS, DFS, and integration. This integrated folder contains independent implementations of every component.
 
-- **BFS** visits neighbors level by level from a valid start vertex. It uses a custom array queue and a visited array.
-- **DFS** explores a path before backtracking. It uses a custom array stack and a visited array.
-- Traversal from a start vertex visits only its connected component; the menu reports this when other vertices are unreachable.
+## Technologies
 
-## Complexity
+Java standard library only; Git and GitHub are intended for version control and collaboration.
 
-For an adjacency-list graph, BFS and DFS take O(V + E) time and O(V) auxiliary space. Vertex lookup is linear for graph updates; traversal stores neighbor indexes, so BFS/DFS do not repeat label lookups while visiting edges.
+## Features
 
-## Error Handling
+- Array insert, delete, search, display
+- Stack push, pop, peek, display
+- Queue enqueue, dequeue, peek/front, display
+- Singly linked-list insert, delete, search, display
+- Linear search and sorted-data binary search
+- Undirected graph vertex/edge management, display, BFS, and DFS
+- Comparison counts, search results, traversal results, and measured elapsed times
+- Input validation and empty/full/missing-item handling
 
-Empty graph traversal, duplicate vertices, missing edge endpoints, duplicate/self edges, invalid starting vertices, and invalid menu/value input are handled with messages.
+## Architecture and Folder Structure
+
+`src/Main.java` is the integrated entry point. Packages under `src/` separate Array, Stack, Queue, LinkedList, Searching, Graph, and Performance responsibilities. The custom array, stack, queue, list, and graph storage are implemented in project code; standard Java utilities also support sorting, graph traversal bookkeeping/results, and console input.
+
+## Data Structures and Complexity
+
+- Array: append O(1) while capacity remains; indexed deletion O(n); search O(n); storage O(n).
+- Stack: push/pop/peek O(1); storage O(n).
+- Circular queue: enqueue/dequeue/peek O(1); storage O(n).
+- Singly linked list: append/delete/search/display O(n); size/isEmpty O(1); storage O(n).
+- Linear search: O(n) time, O(1) extra space.
+- Binary search: O(log n) time, O(1) extra space on sorted input. The app sorts a copy first; sorting is excluded from the search timer and has O(n log n) time.
+- Graph BFS/DFS: O(V + E) time and O(V) auxiliary space for the traversal.
+
+## Performance Comparison
+
+The analyzer reports search results, comparison counts, nanosecond timing, and BFS/DFS traversal lists and elapsed time. Timing varies with input size, system conditions, and implementation. The measured binary-search interval excludes the preceding copy and sort. Graph traversal starts from the user-selected vertex and covers its connected component.
+
+## Input Validation
+
+Menu choices and integer values are parsed with retry prompts. Index ranges, empty/full structures, duplicate/missing vertices, invalid traversal starts, and missing values are checked before operations.
 
 ## Testing
 
-**PASS — manual scenarios run:** graph module compiled; adding vertices and edges, duplicate edge, display, and valid BFS/DFS were rechecked after the custom-array rewrite. Earlier manual scenarios also covered duplicate vertex, missing endpoint, and invalid traversal start. These were manual console scenarios, not automated tests.
+**PASS — manual Phase 7 scenarios:** all member modules and the integrated application compiled. Console scenarios exercised data-structure operations, search hits/misses and comparison counts, empty/full/missing states, graph operations and traversals, performance output, and invalid numeric/menu/index inputs. These were manual checks, not an automated test suite. After a small graph adjacency-index refinement, the Final-Project sources were recompiled and its graph display/BFS/DFS scenario was rerun successfully.
 
+## Compilation and Running
 
-## Sample Output
+From `Project-Folder/`:
 
-Illustrative example (not a captured transcript):
+```bash
+javac -d out src/Main.java src/Array/*.java src/Stack/*.java src/Queue/*.java src/LinkedList/*.java src/Searching/*.java src/Graph/*.java src/Performance/*.java
+java -cp out Main
+```
 
-```text
-1 -> [2, 3]
-BFS traversal: [1, 2, 3]
-DFS traversal: [1, 2, 3]
+Optional standalone performance example:
+
+```bash
+java -cp out Performance.PerformanceMain
 ```

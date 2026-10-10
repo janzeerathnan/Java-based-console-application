@@ -1,54 +1,60 @@
-package src.Graph;
+package Graph;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Undirected graph using custom vertex and adjacency arrays. */
+/** Undirected graph stored as custom vertex and adjacency arrays. */
 public class Graph {
     private Vertex[] vertices = new Vertex[4];
-    private int vertexCount;
+    private int[][] adjacency = new int[4][];
+    private int count;
 
     public boolean addVertex(int label) {
         if (indexOf(label) >= 0) return false;
-        if (vertexCount == vertices.length) {
-            Vertex[] expanded = new Vertex[vertices.length * 2];
-            System.arraycopy(vertices, 0, expanded, 0, vertexCount);
-            vertices = expanded;
+        if (count == vertices.length) {
+            Vertex[] expandedVertices = new Vertex[vertices.length * 2];
+            int[][] expandedAdjacency = new int[adjacency.length * 2][];
+            System.arraycopy(vertices, 0, expandedVertices, 0, count);
+            System.arraycopy(adjacency, 0, expandedAdjacency, 0, count);
+            vertices = expandedVertices;
+            adjacency = expandedAdjacency;
         }
-        vertices[vertexCount++] = new Vertex(label);
+        vertices[count] = new Vertex(label);
+        adjacency[count] = new int[0];
+        count++;
         return true;
     }
 
-    /** Adds one undirected edge between existing, distinct vertices. */
     public boolean addEdge(int from, int to) {
         int fromIndex = indexOf(from), toIndex = indexOf(to);
-        if (fromIndex < 0 || toIndex < 0 || fromIndex == toIndex || vertices[fromIndex].hasNeighborIndex(toIndex)) return false;
-        vertices[fromIndex].addNeighborIndex(toIndex);
-        vertices[toIndex].addNeighborIndex(fromIndex);
+        if (fromIndex < 0 || toIndex < 0 || fromIndex == toIndex || contains(adjacency[fromIndex], toIndex)) return false;
+        adjacency[fromIndex] = append(adjacency[fromIndex], toIndex);
+        adjacency[toIndex] = append(adjacency[toIndex], fromIndex);
         return true;
     }
+
+    public boolean containsVertex(int label) { return indexOf(label) >= 0; }
+    public boolean isEmpty() { return count == 0; }
+    public int vertexCount() { return count; }
 
     public void display() {
         if (isEmpty()) { System.out.println("Graph is empty."); return; }
-        for (int i = 0; i < vertexCount; i++) {
+        for (int i = 0; i < count; i++) {
             System.out.print(vertices[i].getLabel() + " -> ");
-            int[] neighbors = vertices[i].getNeighborIndexes();
-            if (neighbors.length == 0) System.out.println("(no neighbors)");
+            if (adjacency[i].length == 0) System.out.println("(no neighbors)");
             else {
-                for (int j = 0; j < neighbors.length; j++) {
-                    System.out.print(vertices[neighbors[j]].getLabel() + (j + 1 == neighbors.length ? "" : ", "));
-                }
+                for (int j = 0; j < adjacency[i].length; j++) System.out.print(vertices[adjacency[i][j]].getLabel() + (j + 1 == adjacency[i].length ? "" : ", "));
                 System.out.println();
             }
         }
     }
 
-    /** BFS traverses with a custom array queue. */
+    /** BFS uses a queue stored in an array. */
     public List<Integer> bfs(int start) {
         int startIndex = indexOf(start);
-        if (startIndex < 0) throw new IllegalArgumentException("Starting vertex " + start + " does not exist.");
-        boolean[] visited = new boolean[vertexCount];
-        int[] queue = new int[vertexCount];
+        if (startIndex < 0) throw new IllegalArgumentException("Starting vertex does not exist.");
+        boolean[] visited = new boolean[count];
+        int[] queue = new int[count];
         int front = 0, rear = 0;
         List<Integer> order = new ArrayList<>();
         visited[startIndex] = true;
@@ -56,19 +62,19 @@ public class Graph {
         while (front < rear) {
             int current = queue[front++];
             order.add(vertices[current].getLabel());
-            for (int neighbor : vertices[current].getNeighborIndexes()) {
-                if (!visited[neighbor]) { visited[neighbor] = true; queue[rear++] = neighbor; }
+            for (int next : adjacency[current]) {
+                if (!visited[next]) { visited[next] = true; queue[rear++] = next; }
             }
         }
         return order;
     }
 
-    /** Iterative DFS traverses with a custom array stack. */
+    /** Iterative DFS uses a stack stored in an array. */
     public List<Integer> dfs(int start) {
         int startIndex = indexOf(start);
-        if (startIndex < 0) throw new IllegalArgumentException("Starting vertex " + start + " does not exist.");
-        boolean[] visited = new boolean[vertexCount];
-        int[] stack = new int[vertexCount];
+        if (startIndex < 0) throw new IllegalArgumentException("Starting vertex does not exist.");
+        boolean[] visited = new boolean[count];
+        int[] stack = new int[count];
         int top = 0;
         List<Integer> order = new ArrayList<>();
         stack[top++] = startIndex;
@@ -76,21 +82,23 @@ public class Graph {
         while (top > 0) {
             int current = stack[--top];
             order.add(vertices[current].getLabel());
-            int[] neighbors = vertices[current].getNeighborIndexes();
-            for (int i = neighbors.length - 1; i >= 0; i--) {
-                int neighbor = neighbors[i];
-                if (!visited[neighbor]) { visited[neighbor] = true; stack[top++] = neighbor; }
+            for (int i = adjacency[current].length - 1; i >= 0; i--) {
+                int next = adjacency[current][i];
+                if (!visited[next]) { visited[next] = true; stack[top++] = next; }
             }
         }
         return order;
     }
 
-    public boolean containsVertex(int label) { return indexOf(label) >= 0; }
-    public boolean isEmpty() { return vertexCount == 0; }
-    public int vertexCount() { return vertexCount; }
-
     private int indexOf(int label) {
-        for (int i = 0; i < vertexCount; i++) if (vertices[i].getLabel() == label) return i;
+        for (int i = 0; i < count; i++) if (vertices[i].getLabel() == label) return i;
         return -1;
     }
+    private int[] append(int[] source, int value) {
+        int[] result = new int[source.length + 1];
+        System.arraycopy(source, 0, result, 0, source.length);
+        result[source.length] = value;
+        return result;
+    }
+    private boolean contains(int[] values, int target) { for (int value : values) if (value == target) return true; return false; }
 }
