@@ -9,8 +9,8 @@ Standalone integrated Java console application demonstrating data structures, se
 | Member | Name | Student ID | Responsibility |
 | --- | --- | --- | --- |
 | Member 1 | Thahiya | 23DA2-1151 | Array and Searching |
-| Member 2 | Ashadha | 23DA2-612 | Stack and Queue |
-| Member 3 | Hamthani | 23DA2- | Linked List |
+| Member 2 | Ashadha | 23DA2-0612 | Stack and Queue |
+| Member 3 | Hamthani | 23DA2-0871 | Linked List |
 | Member 4 | Athnan | 23DA2-0490 | Graph, BFS, DFS, Integration |
 
 Update names, IDs, and contribution claims with the actual team details before submission.
